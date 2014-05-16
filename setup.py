@@ -10,7 +10,7 @@ setup(name='pdfify_celery',
       description="PDF conversion with Celery distributed task queue.",
       long_description=(
           open("README.rst").read() + "\n" +
-          open(os.path.join("docs", "HISTORY.txt")).read(),
+          open(os.path.join("docs", "HISTORY.txt")).read()
       ),
       # Get more strings from
       # http://pypi.python.org/pypi?:action=list_classifiers
