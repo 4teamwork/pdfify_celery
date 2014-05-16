@@ -9,6 +9,7 @@ CHUNK_SIZE = 65536
 OUTPUT_PDF_PREFIX = 'Job-01CF701A-00000001_'
 logger = logging.getLogger('pdfify_celery')
 app = Celery('tasks')
+app.config_from_object('celeryconfig')
 
 
 def uuid_filename(filename, uuid):
