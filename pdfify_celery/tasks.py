@@ -21,7 +21,7 @@ def uuid_filename(filename, uuid):
 def convert(url, uuid, filename, content_type):
     """Convert the document at the given ``url`` to PDF."""
     chain = (fetch_document.s(url, uuid, filename)
-             | wait_for_pdf.s(filename)
+             | wait_for_pdf.s(uuid, filename)
              | upload_pdf.s(url, uuid, filename))
     chain()
 
