@@ -27,7 +27,7 @@ def convert(url, uuid, filename, content_type):
 
 
 @app.task
-def fetch_document(self, url, uuid, filename):
+def fetch_document(url, uuid, filename):
     doc_filename = os.path.join(PDFTOOLS_PICKUP_FOLDER,
                                 uuid_filename(filename, uuid))
     req = requests.get(url, stream=True)
@@ -38,7 +38,7 @@ def fetch_document(self, url, uuid, filename):
 
 
 @app.task
-def wait_for_pdf(self, uuid, filename):
+def wait_for_pdf(uuid, filename):
     pdf_filename = (os.path.basename(uuid_filename(filename, uuid))
                     + os.path.extsep + 'pdf')
 
@@ -54,7 +54,7 @@ def wait_for_pdf(self, uuid, filename):
 
 
 @app.task
-def upload_pdf(self, url, uuid, filename):
+def upload_pdf(url, uuid, filename):
     pdf_filename = os.path.join(
         PDFTOOLS_OUTPUT_FOLDER,
         (os.path.basename(uuid_filename(filename, uuid))
