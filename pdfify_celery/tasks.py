@@ -21,8 +21,8 @@ def uuid_filename(filename, uuid):
 def convert(url, uuid, filename, content_type):
     """Convert the document at the given ``url`` to PDF."""
     chain = (fetch_document.s(url, uuid, filename)
-             | wait_for_pdf.s(uuid, filename)
-             | upload_pdf.s(url, uuid, filename))
+             | wait_for_pdf.s(uuid)
+             | upload_pdf.s(url, uuid))
     chain()
 
 
@@ -35,10 +35,11 @@ def fetch_document(url, uuid, filename):
         with open(doc_filename, 'wb') as fd:
             for chunk in req.iter_content(CHUNK_SIZE):
                 fd.write(chunk)
+    return filename
 
 
 @app.task
-def wait_for_pdf(uuid, filename):
+def wait_for_pdf(filename, uuid):
     pdf_filename = (os.path.basename(uuid_filename(filename, uuid))
                     + os.path.extsep + 'pdf')
 
@@ -52,9 +53,11 @@ def wait_for_pdf(uuid, filename):
                 return
         sleep(10)
 
+    return filename
+
 
 @app.task
-def upload_pdf(url, uuid, filename):
+def upload_pdf(filename, url, uuid):
     pdf_filename = os.path.join(
         PDFTOOLS_OUTPUT_FOLDER,
         (os.path.basename(uuid_filename(filename, uuid))
